@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Draft Hub | 시안 공유 센터</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --accent-primary: #818cf8;
+            --accent-glow: rgba(99, 102, 241, 0.15);
+            --toast-bg: #1e1b4b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.08) 0px, transparent 50%);
+            font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* Header Style */
+        header {
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-area {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        /* Controls: Search and Tabs */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            fill: var(--text-muted);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Projects Section */
+        .project-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.75rem;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .project-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 99px;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--accent-primary);
+            font-weight: 500;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .project-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        /* Versions Timeline */
+        .version-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .version-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            padding-left: 0.5rem;
+        }
+
+        .version-row::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 70%;
+            background: var(--accent-gradient);
+            border-radius: 4px;
+            opacity: 0.7;
+        }
+
+        .version-tag {
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .version-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            margin-top: 0.15rem;
+        }
+
+        .pages-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .page-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .page-link-btn:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.4);
+            color: #fff;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            margin-left: 0.25rem;
+        }
+
+        .copy-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .copy-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px dashed var(--border-color);
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            fill: var(--text-muted);
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Toast Alert */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--toast-bg);
+            border-left: 4px solid var(--accent-primary);
+            color: var(--text-main);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .version-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+                padding-bottom: 0.75rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            }
+            .version-row::before {
+                height: 30px;
+                top: 15px;
+            }
+            .version-tag {
+                flex-direction: row;
+                gap: 0.75rem;
+                align-items: center;
+            }
+            .version-date {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo-area">Design Draft Hub</div>
+            <p>프로젝트별 HTML 퍼블리싱 시안 공유 포털</p>
+        </header>
+
+        <div class="controls">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <input type="text" id="search-input" placeholder="프로젝트명 검색..." oninput="filterProjects()">
+            </div>
+        </div>
+
+        <div class="project-section" id="project-container">
+            <!-- Project 1 (데모용 예시) -->
+            <div class="project-card" data-name="어드민 대시보드 프로젝트 admin dashboard design">
+                <div class="project-header">
+                    <div>
+                        <div class="project-title">
+                            어드민 대시보드 프로젝트
+                            <span class="project-badge">진행중</span>
+                        </div>
+                    </div>
+                    <div class="project-meta">
+                        최근 업데이트: 2026-07-09
+                    </div>
+                </div>
+                
+                <div class="version-list">
+                    <!-- v2 -->
+                    <div class="version-row">
+                        <div class="version-tag">
+                            v2 (최신)
+                            <span class="version-date">2026-07-09</span>
+                        </div>
+                        <div class="pages-container">
+                            <div style="display: inline-flex; align-items: center;">
+                                <a href="design-drafts/project-A/v2_20260709/main.html" class="page-link-btn" target="_blank">💻 메인 대시보드</a>
+                                <button class="copy-btn" onclick="copyLink('design-drafts/project-A/v2_20260709/main.html')" title="링크 복사">
+                                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                                </button>
+                            </div>
+                            <div style="display: inline-flex; align-items: center;">
+                                <a href="design-drafts/project-A/v2_20260709/detail.html" class="page-link-btn" target="_blank">📊 상세 분석 차트</a>
+                                <button class="copy-btn" onclick="copyLink('design-drafts/project-A/v2_20260709/detail.html')" title="링크 복사">
+                                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- v1 -->
+                    <div class="version-row">
+                        <div class="version-tag" style="opacity: 0.6;">
+                            v1 (이전)
+                            <span class="version-date">2026-07-08</span>
+                        </div>
+                        <div class="pages-container" style="opacity: 0.7;">
+                            <div style="display: inline-flex; align-items: center;">
+                                <a href="design-drafts/project-A/v1_20260708/main.html" class="page-link-btn" target="_blank">💻 메인 대시보드</a>
+                                <button class="copy-btn" onclick="copyLink('design-drafts/project-A/v1_20260708/main.html')" title="링크 복사">
+                                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2 (데모용 예시) -->
+            <div class="project-card" data-name="소개 및 랜딩 웹사이트 landing page homepage introduction">
+                <div class="project-header">
+                    <div>
+                        <div class="project-title">
+                            브랜드 소개 랜딩 페이지
+                            <span class="project-badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">검토완료</span>
+                        </div>
+                    </div>
+                    <div class="project-meta">
+                        최근 업데이트: 2026-07-09
+                    </div>
+                </div>
+                
+                <div class="version-list">
+                    <div class="version-row">
+                        <div class="version-tag">
+                            v1 (최신)
+                            <span class="version-date">2026-07-09</span>
+                        </div>
+                        <div class="pages-container">
+                            <div style="display: inline-flex; align-items: center;">
+                                <a href="design-drafts/project-B/v1_20260709/index.html" class="page-link-btn" target="_blank">🌐 랜딩 페이지</a>
+                                <button class="copy-btn" onclick="copyLink('design-drafts/project-B/v1_20260709/index.html')" title="링크 복사">
+                                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Component -->
+    <div class="toast" id="copy-toast">
+        <svg style="width:18px;height:18px;fill:#818cf8" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        <span>클립보드에 링크가 복사되었습니다!</span>
+    </div>
+
+    <script>
+        // Copy Link Function
+        function copyLink(path) {
+            // URL 결합 논리 (도메인 감지)
+            const origin = window.location.origin;
+            const pathname = window.location.pathname;
+            const dirPath = pathname.substring(0, pathname.lastIndexOf('/') + 1);
+            const fullUrl = origin + dirPath + path;
+
+            navigator.clipboard.writeText(fullUrl).then(() => {
+                showToast();
+            }).catch(err => {
+                console.error('복사 실패: ', err);
+            });
+        }
+
+        // Toast Trigger
+        function showToast() {
+            const toast = document.getElementById('copy-toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // Live Search Filter
+        function filterProjects() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.project-card');
+            let hasResults = false;
+
+            cards.forEach(card => {
+                const searchData = card.getAttribute('data-name').toLowerCase();
+                if (searchData.includes(query)) {
+                    card.style.display = 'block';
+                    hasResults = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
